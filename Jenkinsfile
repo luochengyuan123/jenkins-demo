@@ -16,7 +16,7 @@ node('jenkins-jnlp') {
     }
     stage('Build & Push Image') {
         echo "4.Push Docker Image Stage"
-        dir('/var/jenkins_home/workspace/build_docker') {
+        dir('target') {
            docker.withRegistry("https://${registryUrl}", "${registryCredential}") {
                 def image = docker.build("${registryUrl}/payeco/jenkins-demo:${build_tag}", ".")
                 image.push()
