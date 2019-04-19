@@ -14,15 +14,13 @@ node('jenkins-jnlp') {
     stage('Test') {
       echo "2.Test Stage"
     }
-    stage('Build') {
-        echo "3.Build Docker Image Stage"
-        sh "docker build -t ${registryUrl}/payeco/jenkins-demo:${build_tag} ."
-    }
-    stage('Push') {
+    stage('Build & Push Image') {
         echo "4.Push Docker Image Stage"
-        withCredentials([usernamePassword(credentialsId: 'harbor', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-            sh "docker login ${registryUrl} -u ${dockerHubUser} -p ${dockerHubPassword}"
-            sh "docker push ${registryUrl}/payeco/jenkins-demo:${build_tag}"
+        dir('/var/jenkins_home/workspace/build_docker') {
+           docker.withRegistry("https://${registryUrl}", "${registryCredential}") {
+                def image = docker.build("${registryUrl}/payeco/jenkins-demo:${build_tag}", ".")
+                image.push()
+            }
         }
     }
     stage('Deploy') {
