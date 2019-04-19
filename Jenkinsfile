@@ -1,3 +1,5 @@
+def registryUrl = "harbor.haimaxy.com"
+def registryCredential = harbor
 node('jenkins-jnlp') {
     stage('Prepare') {
         echo "1.Prepare Stage"
@@ -14,13 +16,13 @@ node('jenkins-jnlp') {
     }
     stage('Build') {
         echo "3.Build Docker Image Stage"
-        sh "docker build -t oliverluo/jenkins-demo:${build_tag} ."
+        sh "docker build -t ${registryUrl}/payeco/jenkins-demo:${build_tag} ."
     }
     stage('Push') {
         echo "4.Push Docker Image Stage"
         withCredentials([usernamePassword(credentialsId: 'harbor', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-            sh "docker login -u ${dockerHubUser} -p ${dockerHubPassword}"
-            sh "docker push payeco/jenkins-demo:${build_tag}"
+            sh "docker login ${registryUrl} -u ${dockerHubUser} -p ${dockerHubPassword}"
+            sh "docker push ${registryUrl}/payeco/jenkins-demo:${build_tag}"
         }
     }
     stage('Deploy') {
