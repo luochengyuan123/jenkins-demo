@@ -1,5 +1,5 @@
 def registryUrl = "harbor.haimaxy.com"
-def registryCredential = harbor
+def registryCredential = "harbor"
 node('jenkins-jnlp') {
     stage('Prepare') {
         echo "1.Prepare Stage"
