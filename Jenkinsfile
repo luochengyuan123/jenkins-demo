@@ -1,5 +1,6 @@
 def registryUrl = "harbor.haimaxy.com"
 def registryCredential = "harbor"
+projectName = env.JOB_NAME.substring(2, env.JOB_NAME.length())
 node('jenkins-jnlp') {
     stage('Prepare') {
         echo "1.Prepare Stage"
@@ -13,6 +14,7 @@ node('jenkins-jnlp') {
     }
     stage('Test') {
       echo "2.Test Stage"
+      echo "${projectName}"
     }
     stage('Build & Push Image') {
         echo "4.Push Docker Image Stage"
