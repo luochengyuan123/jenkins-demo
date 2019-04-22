@@ -1,7 +1,18 @@
+def envKey = env.JOB_NAME.substring(0,1)
+def domainName, namespace, portPrefix, springConfigLabel, serviceAddr
+switch (envKey) {
+    case "d":
+       domainName = "d.haimaxy.com"
+       namespace = "oliver-dev"
+       break
+    default:
+        println("No matching case found!!")
+
+}
 def registryUrl = "harbor.haimaxy.com"
 def registryCredential = "harbor"
 projectName = env.JOB_NAME.substring(2, env.JOB_NAME.length())
-gitBranch = params.BRANCH.substring(7, params.BRANCH.length()).trim()
+gitBranch = params.BRANCH.trim()
 node('jenkins-jnlp') {
     stage('Prepare') {
         echo "1.Prepare Stage"
