@@ -1,7 +1,7 @@
 def registryUrl = "harbor.haimaxy.com"
 def registryCredential = "harbor"
 projectName = env.JOB_NAME.substring(2, env.JOB_NAME.length())
-gitBranch = params.BRANCH.substring(5, params.BRANCH.length()).trim()
+gitBranch = params.BRANCH.substring(7, params.BRANCH.length()).trim()
 node('jenkins-jnlp') {
     stage('Prepare') {
         echo "1.Prepare Stage"
