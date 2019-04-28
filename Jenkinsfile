@@ -12,6 +12,7 @@ switch (envKey) {
 def registryUrl = "harbor.haimaxy.com"
 def registryCredential = "harbor"
 projectName = env.JOB_NAME.substring(2, env.JOB_NAME.length())
+jobName = env.JOB_NAME.trim()
 gitBranch = params.BRANCH.trim()
 node('jenkins-jnlp') {
     stage('Prepare') {
@@ -31,7 +32,7 @@ node('jenkins-jnlp') {
     }
     stage('Build & Push Image') {
         echo "4.Push Docker Image Stage"
-        dir('/home/jenkins/workspace/d-jenkins-demo') {
+        dir("/home/jenkins/workspace/${jobName}") {
            docker.withRegistry("https://${registryUrl}", "${registryCredential}") {
                 def image = docker.build("${registryUrl}/payeco/jenkins-demo:${build_tag}", ".")
                 image.push()
