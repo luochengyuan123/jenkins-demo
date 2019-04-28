@@ -11,9 +11,9 @@ switch (envKey) {
 }
 def registryUrl = "harbor.haimaxy.com"
 def registryCredential = "harbor"
-projectName = env.JOB_NAME.substring(2, env.JOB_NAME.length())
-jobName = env.JOB_NAME.trim()
-gitBranch = params.BRANCH.trim()
+def projectName = env.JOB_NAME.substring(2, env.JOB_NAME.length())
+def jobName = env.JOB_NAME.trim()
+def gitBranch = params.BRANCH.trim()
 node('jenkins-jnlp') {
     stage('Prepare') {
         echo "1.Prepare Stage"
@@ -45,7 +45,7 @@ node('jenkins-jnlp') {
             input "确认要部署线上环境吗？"
         }
         sh "sed -i 's/<BUILD_TAG>/${build_tag}/' k8s.yaml"
-        sh "sed -i 's/<BRANCH_NAME>/${env.BRANCH_NAME}/' k8s.yaml"
+        sh "sed -i 's/<BRANCH_NAME>/${gitBranch}/' k8s.yaml"
         sh "kubectl apply -f k8s.yaml --record"
     }
 }
