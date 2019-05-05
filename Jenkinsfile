@@ -14,7 +14,7 @@ def registryCredential = "harbor"
 def projectName = env.JOB_NAME.substring(2, env.JOB_NAME.length())
 def jobName = env.JOB_NAME.trim()
 def gitBranch = params.BRANCH.trim()
-node('jenkins-master') {
+node('jenkins-jnlp') {
     stage('Prepare') {
         echo "1.Prepare Stage"
         checkout scm
@@ -32,7 +32,7 @@ node('jenkins-master') {
     }
     stage('Build & Push Image') {
         echo "4.Push Docker Image Stage"
-        dir("/var/jenkins_home/workspace/${jobName}") {
+        dir("/home/jenkins/workspace/${jobName}") {
            docker.withRegistry("https://${registryUrl}", "${registryCredential}") {
                 def image = docker.build("${registryUrl}/payeco/jenkins-demo:${build_tag}", ".")
                 image.push()
