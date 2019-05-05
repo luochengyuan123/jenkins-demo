@@ -14,7 +14,7 @@ def registryCredential = "harbor"
 def projectName = env.JOB_NAME.substring(2, env.JOB_NAME.length())
 def jobName = env.JOB_NAME.trim()
 def gitBranch = params.BRANCH.trim()
-node('jenkins-jnlp') {
+node('jenkins-master') {
     stage('Prepare') {
         echo "1.Prepare Stage"
         checkout scm
