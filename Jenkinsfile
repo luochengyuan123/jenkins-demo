@@ -9,8 +9,8 @@ switch (envKey) {
         println("No matching case found!!")
 
 }
-def registryUrl = "harbor.haimaxy.com"
-def registryCredential = "harbor"
+def registryUrl = "harbor.tnaot.com"
+def registryCredential = "dockerpullid"
 def projectName = env.JOB_NAME.substring(2, env.JOB_NAME.length())
 def jobName = env.JOB_NAME.trim()
 def gitBranch = params.BRANCH.trim()
