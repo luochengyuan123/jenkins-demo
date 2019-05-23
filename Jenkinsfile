@@ -34,7 +34,7 @@ node('jenkins-jnlp') {
         echo "4.Push Docker Image Stage"
         dir("/home/jenkins/workspace/${jobName}") {
            docker.withRegistry("https://${registryUrl}", "${registryCredential}") {
-                def image = docker.build("${registryUrl}/payeco/jenkins-demo:${build_tag}", ".")
+                def image = docker.build("${registryUrl}/tnaot/jenkins-demo:${build_tag}", ".")
                 image.push()
             }
         }
