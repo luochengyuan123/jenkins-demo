@@ -1,20 +1,9 @@
-def envKey = env.JOB_NAME.substring(0,1)
-def domainName, namespace, portPrefix, springConfigLabel, serviceAddr
-switch (envKey) {
-    case "d":
-       domainName = "d.haimaxy.com"
-       namespace = "oliver-dev"
-       break
-    default:
-        println("No matching case found!!")
-
-}
-def registryUrl = "harbor.tnaot.com"
-def registryCredential = "dockerpullid"
+def registryUrl = "registry-intl.cn-hongkong.aliyuncs.com"
+def registryCredential = "dockerregistry"
 def projectName = env.JOB_NAME.substring(2, env.JOB_NAME.length())
 def jobName = env.JOB_NAME.trim()
 def gitBranch = params.BRANCH.trim()
-node('jenkins-jnlp') {
+node {
     stage('Prepare') {
         echo "1.Prepare Stage"
         checkout scm
@@ -32,9 +21,9 @@ node('jenkins-jnlp') {
     }
     stage('Build & Push Image') {
         echo "4.Push Docker Image Stage"
-        dir("/home/jenkins/workspace/${jobName}") {
+        dir("/var/lib/jenkins/workspace/${jobName}") {
            docker.withRegistry("https://${registryUrl}", "${registryCredential}") {
-                def image = docker.build("${registryUrl}/tnaot/jenkins-demo:${build_tag}", ".")
+                def image = docker.build("${registryUrl}/tnaot/${projectName}:${build_tag}", ".")
                 image.push()
             }
         }
@@ -46,7 +35,8 @@ node('jenkins-jnlp') {
         }
         sh "sed -i 's/<BUILD_TAG>/${build_tag}/' k8s.yaml"
         sh "sed -i 's/<BRANCH_NAME>/${gitBranch}/' k8s.yaml"
-        sh "kubectl get pod -n kube-ops"
+        sh "kubectl get pod"
         sh "kubectl apply -f k8s.yaml --record --validate=false"
     }
 }
+
